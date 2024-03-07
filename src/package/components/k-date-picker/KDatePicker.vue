@@ -161,7 +161,14 @@ export default {
       ) {
         if (startDay.value && endDay.value) {
           emit("update:modelValue", false);
-          emit("change", [startDay.value.valueOf(), endDay.value.valueOf()]);
+          emit("change", [
+            props.formatter
+              ? startDay.value.format(props.formatter)
+              : startDay.value.valueOf(),
+            props.formatter
+              ? endDay.value.format(props.formatter)
+              : endDay.value.valueOf(),
+          ]);
         } else {
           kToast.value.show({
             type: "warning",
@@ -171,7 +178,12 @@ export default {
       } else {
         if (selectedDay.value) {
           emit("update:modelValue", false);
-          emit("change", selectedDay.value.valueOf());
+          emit(
+            "change",
+            props.formatter
+              ? selectedDay.value.format(props.formatter)
+              : selectedDay.value.valueOf(),
+          );
         } else {
           kToast.value.show({ type: "warning", message: "请选择日期" });
         }
