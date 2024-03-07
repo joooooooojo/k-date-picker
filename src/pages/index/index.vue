@@ -33,7 +33,7 @@ export default {
     </view>
     <KDatePicker
       v-model="show"
-      type="yearrange"
+      type="daterange"
       :default-value="defaultValue"
       limit-start-date="2020"
       limit-end-date="2028"

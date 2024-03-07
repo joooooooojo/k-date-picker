@@ -3,10 +3,8 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import KButton from "../k-bottom-button/KBottomButton.vue";
 import dayjs from "dayjs";
 import KToast from "../k-toast/KToast.vue";
-import left from "/src/static/icons/jiantou_liebiaoxiangzuo_o.png";
-import doubleLeft from "/src/static/icons/jiantou_yemian_xiangzuo_o.png";
-import right from "/src/static/icons/jiantou_liebiaoxiangyou_o.png";
-import doubleRight from "/src/static/icons/jiantou_yemian_xiangyou_o.png";
+import { left, left_double, closable } from "./icons";
+
 export default {
   name: "KPicker",
   components: { KButton, KToast },
@@ -432,9 +430,9 @@ export default {
       weekList,
       days,
       left,
-      right,
-      doubleLeft,
-      doubleRight,
+
+      left_double,
+      closable,
       handleClickItem,
       toggle,
       selectedDate,
@@ -458,7 +456,7 @@ export default {
         </view>
         <view @click="close">
           <slot name="right">
-            <uni-icons type="closeempty" size="20"></uni-icons>
+            <image :src="closable" class="image-closable"></image>
           </slot>
         </view>
       </view>
@@ -466,25 +464,25 @@ export default {
         <view class="inner-body__arrow">
           <image
             v-if="type === 'date' || type === 'daterange'"
-            style="width: 36rpx; height: 36rpx"
-            :src="doubleLeft"
+            class="image-arrow"
+            :src="left_double"
             @click="toggle('double', 'left')"
           />
           <image
-            style="width: 36rpx; height: 36rpx"
+            class="image-arrow"
             :src="left"
             @click="toggle('single', 'left')"
           />
           <view class="brief">{{ briefDate }}</view>
           <image
-            style="width: 36rpx; height: 36rpx"
-            :src="right"
+            class="image-arrow right-arrow"
+            :src="left"
             @click="toggle('single', 'right')"
           />
           <image
             v-if="type === 'date' || type === 'daterange'"
-            style="width: 36rpx; height: 36rpx"
-            :src="doubleRight"
+            class="image-arrow right-arrow"
+            :src="left_double"
             @click="toggle('double', 'right')"
           />
         </view>
@@ -832,5 +830,16 @@ export default {
 .is-limit {
   color: #a8abb2 !important;
   background-color: #f5f7fa;
+}
+.image-closable {
+  width: 36rpx;
+  height: 36rpx;
+}
+.image-arrow {
+  width: 36rpx;
+  height: 36rpx;
+}
+.right-arrow {
+  transform: rotate(180deg);
 }
 </style>

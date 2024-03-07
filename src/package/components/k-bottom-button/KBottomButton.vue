@@ -1,21 +1,21 @@
 <template>
   <view
-      class="k-button-group"
-      :style="{
+    class="k-button-group"
+    :style="{
       paddingBottom: safeArea && `${bottomSafeArea || 10}px`,
-      boxShadow: boxShadow ? '0 2px 12px 0 rgba(0, 0, 0, 0.1)' : ''
+      boxShadow: boxShadow ? '0 2px 12px 0 rgba(0, 0, 0, 0.1)' : '',
     }"
   >
     <button
-        v-for="(button, index) in list"
-        class="k-button"
-        :style="{
+      v-for="(button, index) in list"
+      class="k-button"
+      :style="{
         color: button.color,
         backgroundColor: button.background,
-        border: '2rpx solid ' + (button.borderColor ?? 'transparent')
+        border: '2rpx solid ' + (button.borderColor ?? 'transparent'),
       }"
-        @click="button.onClick"
-        :key="index"
+      @click="button.onClick"
+      :key="index"
     >
       {{ button.label }}
     </button>
@@ -23,55 +23,55 @@
 </template>
 
 <script>
-import { computed } from "vue"
+import { computed } from "vue";
 export default {
   options: {
-    virtualHost: true
+    virtualHost: true,
   },
   props: {
     safeArea: {
       type: Boolean,
-      default: true
+      default: true,
     },
     boxShadow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     options: {
       type: [Array, Object],
-      default: () => []
+      default: () => [],
     },
     label: {
       type: String,
-      default: ""
+      default: "",
     },
     onClick: {
       type: Function,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   setup(props, { emit }) {
-    const bottomSafeArea = uni.getSystemInfoSync().safeAreaInsets.bottom
+    const bottomSafeArea = uni.getSystemInfoSync().safeAreaInsets.bottom;
     const list = computed(() => {
       if (JSON.stringify(props.options) !== "{}" && props.options.length > 0) {
-        return Array.isArray(props.options) ? props.options : [props.options]
+        return Array.isArray(props.options) ? props.options : [props.options];
       } else {
         return [
           {
             label: props.label,
             color: "white",
             background: "#005CEEFF",
-            onClick: props.onClick
-          }
-        ]
+            onClick: props.onClick,
+          },
+        ];
       }
-    })
+    });
     return {
       bottomSafeArea,
-      list
-    }
-  }
-}
+      list,
+    };
+  },
+};
 </script>
 <style lang="scss">
 .k-button-group {
