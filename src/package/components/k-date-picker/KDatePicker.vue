@@ -359,6 +359,12 @@ export default {
         console.error("类型必须为 day | month | year");
         return;
       }
+      // 检查 isRange和 multiple 是否同时为 true
+      if (this.isRange && this.multiple) {
+        console.error("目前暂不支持时间段的多选");
+        return;
+      }
+
       // 清空原数据
       this.checked = [];
       this.rangeStart = null;
@@ -515,6 +521,25 @@ export default {
 
 <style lang="scss">
 .k-date-picker {
+  /** 控制选中文字的位置 **/
+  --bottom-offset: 10%;
+  /** 选中时字体的颜色**/
+  --seletct--text-color: white;
+  /** 选中时背景颜色 **/
+  --seletct--background-color: #005ceeff;
+  /** 处于区间的字体颜色 **/
+  --in-range--text-color: #005ceeff;
+  /** 处于区间的背景颜色 **/
+  --in-range--background-color: #f2f6fc;
+  /** 限制的字体颜色 **/
+  --limit--text-color: #a8abb2;
+  /** 限制的背景颜色 **/
+  --limit--background-color: #f5f7fa;
+  /** current的背景颜色 **/
+  --current--background-color: #e4edfe;
+  /** current的字体颜色 **/
+  --current--text-color: #7994b2;
+
   box-sizing: border-box;
   width: 100%;
   padding: 30rpx 30rpx 20rpx;
@@ -525,14 +550,14 @@ export default {
   flex-direction: column;
   .is-current {
     border-radius: 8rpx;
-    background-color: #e4edfe;
+    background-color: var(--current--background-color);
     position: relative;
-    --color: #7994b2;
+    --color: var(--current--text-color);
     &:after {
       color: var(--color);
       position: absolute;
       left: 50%;
-      bottom: 10%;
+      bottom: var(--bottom-offset);
       transform: translate(-50%);
       font-size: 22rpx;
       /* #ifdef APP-PLUS */
@@ -625,59 +650,40 @@ export default {
     }
   }
   .is-limit {
-    color: #a8abb2 !important;
-    background-color: #f5f7fa;
+    color: var(--limit--text-color) !important;
+    background-color: var(--limit--background-color);
   }
   .is-in-range {
-    --color: #005ceeff !important;
-    background-color: #f2f6fc !important;
+    --color: var(--in-range--text-color) !important;
+    background-color: var(--in-range--background-color) !important;
     border-radius: 0 !important;
-    color: #005ceeff !important;
+    color: var(--in-range--text-color) !important;
   }
   .is-selected {
     &:after {
       content: "已选" !important;
-      color: white !important;
+      color: var(--seletct--text-color) !important;
       position: absolute;
       left: 50%;
-      bottom: 10%;
+      bottom: var(--bottom-offset);
       transform: translate(-50%);
       font-size: 18rpx;
       /* #ifdef APP-PLUS */
       font-weight: 500;
       /* #endif */
     }
-    --color: white;
     position: relative;
-    background-color: #005ceeff !important;
-    color: white !important;
+    background-color: var(--seletct--background-color) !important;
+    color: var(--seletct--text-color) !important;
     border-radius: 8rpx !important;
-  }
-  .is-today {
-    border-radius: 8rpx;
-    background-color: #e4edfe;
-    position: relative;
-    --color: #7994b2;
-    &:after {
-      content: "今天";
-      color: var(--color);
-      position: absolute;
-      left: 50%;
-      bottom: 10%;
-      transform: translate(-50%);
-      font-size: 18rpx;
-      /* #ifdef APP-PLUS */
-      font-weight: 500;
-      /* #endif */
-    }
   }
   .is-start {
     &:after {
       content: "开始";
-      color: white !important;
+      color: var(--seletct--text-color) !important;
       position: absolute;
       left: 50%;
-      bottom: 10%;
+      bottom: var(--bottom-offset);
       transform: translate(-50%);
       font-size: 18rpx;
       /* #ifdef APP-PLUS */
@@ -685,17 +691,17 @@ export default {
       /* #endif */
     }
     position: relative;
-    background-color: #005ceeff !important;
-    color: white !important;
+    background-color: var(--seletct--background-color) !important;
+    color: var(--seletct--text-color) !important;
     border-radius: 8rpx 0 0 8rpx;
   }
   .is-end {
     &:after {
       content: "结束";
-      color: white !important;
+      color: var(--seletct--text-color) !important;
       position: absolute;
       left: 50%;
-      bottom: 10%;
+      bottom: var(--bottom-offset);
       transform: translate(-50%);
       font-size: 18rpx;
       /* #ifdef APP-PLUS */
@@ -703,8 +709,8 @@ export default {
       /* #endif */
     }
     position: relative;
-    background-color: #005ceeff !important;
-    color: white !important;
+    background-color: var(--seletct--background-color) !important;
+    color: var(--seletct--text-color) !important;
     border-radius: 0 8rpx 8rpx 0;
   }
   .image-closable {

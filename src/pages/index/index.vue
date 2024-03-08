@@ -12,6 +12,9 @@ function onShow() {
 function onChangeValue() {
   defaultValue.value = ["2021", "2022"];
 }
+const onChange = (e) => {
+  console.log(e);
+};
 </script>
 
 <template>
@@ -23,7 +26,8 @@ function onChangeValue() {
 
     <KDatePicker
       v-model="prop.start"
-      type="year"
+      type="day"
+      @change="onChange"
       is-range
       limit-start-date="2020"
       limit-end-date="2028"
