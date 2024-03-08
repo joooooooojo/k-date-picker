@@ -1,7 +1,7 @@
 <script>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import KButton from "../k-bottom-button/KBottomButton.vue";
-import dayjs from "dayjs";
+import dayjs from "./day";
 import KToast from "../k-toast/KToast.vue";
 import { left, left_double, closable } from "./icons";
 
@@ -47,6 +47,14 @@ export default {
     formatter: {
       type: String,
     },
+    isRange: {
+      type: Boolean,
+      default: () => false,
+    },
+    multiple: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   setup(props, { emit }) {
     const kToast = ref();
@@ -71,13 +79,13 @@ export default {
     const currentDay = ref(dayjs(new Date()));
     const now = ref(dayjs());
     const briefDate = computed(() => {
-      if (props.type === "date" || props.type === "daterange") {
+      if (props.type === "date") {
         return currentDay.value.format("YYYY年MM月");
       }
-      if (props.type === "month" || props.type === "monthrange") {
+      if (props.type === "month") {
         return currentDay.value.format("YYYY年");
       }
-      if (props.type === "year" || props.type === "yearrange") {
+      if (props.type === "year") {
         return `${startYear.value.format("YYYY")} - ${startYear.value.add(9, "year").format("YYYY")}`;
       }
     });
@@ -86,7 +94,7 @@ export default {
       //强制触发依赖收集
       [startDay.value, endDay.value, selectedDay.value];
       const result = [];
-      if (props.type === "date" || props.type === "daterange") {
+      if (props.type === "date") {
         let start = currentDay.value.startOf("month");
         const end = currentDay.value.endOf("month");
         //计算当前月的第一天是星期几，然后在result头部补上空字符串
@@ -109,7 +117,7 @@ export default {
               (props.limitEndDate && start.isAfter(dayjs(props.limitEndDate))),
           };
           //如果type是daterange，需要判断是否在选择范围内和是否是开始或结束日期
-          if (props.type === "daterange") {
+          if (props.isRange) {
             obj.isStart = startDay.value && start.isSame(startDay.value, "day");
             obj.isEnd = endDay.value && start.isSame(endDay.value, "day");
             obj.isInRange =
@@ -152,11 +160,7 @@ export default {
       emit("update:modelValue", false);
     };
     const onClick = () => {
-      if (
-        props.type === "daterange" ||
-        props.type === "monthrange" ||
-        props.type === "yearrange"
-      ) {
+      if (props.isRange) {
         if (startDay.value && endDay.value) {
           emit("update:modelValue", false);
           emit("change", [
@@ -200,11 +204,7 @@ export default {
         return;
       }
 
-      if (
-        props.type === "daterange" ||
-        props.type === "monthrange" ||
-        props.type === "yearrange"
-      ) {
+      if (props.isRange) {
         //如果有结束日期和开始日期，并且点击的不是开始日期和结束日期，则将其设置为开始日期并清除结束日期
         if (startDay.value && endDay.value && !day.isStart && !day.isEnd) {
           startDay.value = day.date;
@@ -261,19 +261,19 @@ export default {
     };
 
     const toggle = (type, direction) => {
-      if (props.type === "date" || props.type === "daterange") {
+      if (props.type === "date") {
         currentDay.value = currentDay.value.add(
           direction === "left" ? -1 : 1,
           type === "single" ? "month" : "year",
         );
       }
-      if (props.type === "month" || props.type === "monthrange") {
+      if (props.type === "month") {
         currentDay.value = currentDay.value.add(
           direction === "left" ? -1 : 1,
           "year",
         );
       }
-      if (props.type === "year" || props.type === "yearrange") {
+      if (props.type === "year") {
         startYear.value = startYear.value.add(
           direction === "left" ? -10 : 10,
           "year",
@@ -283,15 +283,12 @@ export default {
 
     const selectedDate = computed(() => {
       const formatMap = {
-        daterange: "YYYY-MM-DD",
-        monthrange: "YYYY-MM",
-        yearrange: "YYYY年",
         date: "YYYY-MM-DD",
         month: "YYYY-MM",
         year: "YYYY年",
       };
       const format = formatMap[props.type];
-      if (["daterange", "monthrange", "yearrange"].includes(props.type)) {
+      if (props.isRange) {
         return `${startDay.value ? startDay.value.format(format) : "-"} 至 ${endDay.value ? endDay.value.format(format) : "-"}`;
       } else {
         return selectedDay.value ? selectedDay.value.format(format) : "-";
@@ -299,7 +296,7 @@ export default {
     });
 
     const backText = computed(() => {
-      if (props.type === "daterange" || props.type === "date") {
+      if (props.type === "date") {
         return currentDay.value.format("M");
       }
     });
@@ -379,17 +376,14 @@ export default {
       return result;
     });
 
-    const init = (type) => {
+    const init = () => {
       // 清空原数据
       startDay.value = null;
       endDay.value = null;
       selectedDay.value = null;
       // 初始化数据
       if (!props.defaultValue) return;
-      if (
-        Array.isArray(props.defaultValue) &&
-        ["daterange", "monthrange", "yearrange"].includes(type)
-      ) {
+      if (Array.isArray(props.defaultValue) && props.isRange) {
         startDay.value = dayjs(props.defaultValue[0]);
         endDay.value = dayjs(props.defaultValue[1]);
       } else if (!Array.isArray(props.defaultValue)) {
@@ -400,14 +394,14 @@ export default {
     const typeWatcher = watch(
       () => [props.type],
       () => {
-        init(props.type);
+        init();
       },
     );
 
     const defaultValueWatcher = watch(
       () => props.defaultValue,
       () => {
-        init(props.type);
+        init();
       },
       {
         deep: true,
@@ -415,7 +409,7 @@ export default {
     );
 
     onMounted(() => {
-      init(props.type);
+      init();
     });
     onBeforeUnmount(() => {
       watcher();
@@ -430,7 +424,6 @@ export default {
       weekList,
       days,
       left,
-
       left_double,
       closable,
       handleClickItem,
