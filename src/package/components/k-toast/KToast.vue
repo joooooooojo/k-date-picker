@@ -1,13 +1,13 @@
 <template>
-  <uni-transition :show="r.show" mode-class="fade" :styles="r.styles">
-    <view class="k-toast__content" :class="'k-type-' + r.config.type">
-      <uni-icons :type="r.iconName" size="17" :color="r.iconColor"></uni-icons>
+  <uni-transition :show="isShow" mode-class="fade" :styles="styles">
+    <view class="k-toast__content" :class="'k-type-' + config.type">
+      <uni-icons :type="iconName" size="17" :color="iconColor"></uni-icons>
       <text
         class="k-toast__content__text"
-        :class="['k-toast__content__text--' + r.config.type]"
+        :class="['k-toast__content__text--' + config.type]"
         style="max-width: 400rpx"
       >
-        {{ r.config.message }}
+        {{ config.message }}
       </text>
     </view>
   </uni-transition>
@@ -17,9 +17,9 @@
 import { reactive } from "vue";
 
 export default {
-  setup(props, { expose }) {
-    const r = reactive({
-      show: false,
+  data() {
+    return {
+      isShow: false,
       styles: {
         position: "absolute",
         display: "flex",
@@ -39,32 +39,34 @@ export default {
         type: "",
         message: "",
       },
-    });
-    function show(params) {
-      r.config.type = params.type;
+    };
+  },
+  methods: {
+    show(params) {
+      this.config.type = params.type;
       switch (params.type) {
         case "error":
-          r.iconName = "close";
-          r.iconColor = "#f56c6c";
-          r.config.message = params.message;
+          this.iconName = "close";
+          this.iconColor = "#f56c6c";
+          this.config.message = params.message;
           break;
         case "success":
-          r.iconName = "checkbox";
-          r.iconColor = "#5ac725";
-          r.config.message = params.message;
+          this.iconName = "checkbox";
+          this.iconColor = "#5ac725";
+          this.config.message = params.message;
           break;
         case "warning":
-          r.iconName = "info";
-          r.iconColor = "#f9ae3d";
-          r.config.message = params.message;
+          this.iconName = "info";
+          this.iconColor = "#f9ae3d";
+          this.config.message = params.message;
           break;
       }
-      r.show = true;
-      r.styles.zIndex = "10086";
+      this.isShow = true;
+      this.styles.zIndex = "10086";
       setTimeout(() => {
-        r.show = false;
+        this.isShow = false;
         setTimeout(() => {
-          r.styles.zIndex = "-10086";
+          this.styles.zIndex = "-10086";
         }, 300);
         //结束动画时 调用事件
         try {
@@ -73,56 +75,52 @@ export default {
           }
         } catch (e) {}
       }, 2000);
-    }
+    },
 
-    function error(message) {
-      r.config.type = "error";
-      r.iconName = "close";
-      r.iconColor = "#f56c6c";
-      r.config.message = message;
-      r.show = true;
-      r.styles.zIndex = "10086";
+    error(message) {
+      this.config.type = "error";
+      this.iconName = "close";
+      this.iconColor = "#f56c6c";
+      this.config.message = message;
+      this.isShow = true;
+      this.styles.zIndex = "10086";
       setTimeout(() => {
-        r.show = false;
+        this.isShow = false;
         setTimeout(() => {
-          r.styles.zIndex = "-10086";
+          this.styles.zIndex = "-10086";
         }, 300);
       }, 2000);
-    }
+    },
 
-    function success(message) {
-      r.config.type = "success";
-      r.iconName = "checkbox";
-      r.iconColor = "#5ac725";
-      r.config.message = message;
-      r.show = true;
-      r.styles.zIndex = "10086";
+    success(message) {
+      this.config.type = "success";
+      this.iconName = "checkbox";
+      this.iconColor = "#5ac725";
+      this.config.message = message;
+      this.isShow = true;
+      this.styles.zIndex = "10086";
       setTimeout(() => {
-        r.show = false;
+        this.isShow = false;
         setTimeout(() => {
-          r.styles.zIndex = "-10086";
+          this.styles.zIndex = "-10086";
         }, 300);
       }, 2000);
-    }
+    },
 
-    function warning(message) {
-      r.config.type = "warning";
-      r.iconName = "info";
-      r.iconColor = "#f9ae3d";
-      r.config.message = message;
-      r.show = true;
-      r.styles.zIndex = "10086";
+    warning(message) {
+      this.config.type = "warning";
+      this.iconName = "info";
+      this.iconColor = "#f9ae3d";
+      this.config.message = message;
+      this.isShow = true;
+      this.styles.zIndex = "10086";
       setTimeout(() => {
-        r.show = false;
+        this.isShow = false;
         setTimeout(() => {
-          r.styles.zIndex = "-10086";
+          this.styles.zIndex = "-10086";
         }, 300);
       }, 2000);
-    }
-    expose({ show, success, warning, error });
-    return {
-      r,
-    };
+    },
   },
 };
 </script>

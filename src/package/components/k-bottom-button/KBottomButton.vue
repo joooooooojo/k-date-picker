@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import { computed } from "vue";
 export default {
   options: {
     virtualHost: true,
@@ -50,25 +49,25 @@ export default {
       default: () => {},
     },
   },
-  setup(props, { emit }) {
-    const bottomSafeArea = uni.getSystemInfoSync().safeAreaInsets.bottom;
-    const list = computed(() => {
-      if (JSON.stringify(props.options) !== "{}" && props.options.length > 0) {
-        return Array.isArray(props.options) ? props.options : [props.options];
+  computed: {
+    list() {
+      if (JSON.stringify(this.options) !== "{}" && this.options.length > 0) {
+        return Array.isArray(this.options) ? this.options : [this.options];
       } else {
         return [
           {
-            label: props.label,
+            label: this.label,
             color: "white",
             background: "#005CEEFF",
-            onClick: props.onClick,
+            onClick: this.onClick,
           },
         ];
       }
-    });
+    },
+  },
+  data() {
     return {
-      bottomSafeArea,
-      list,
+      bottomSafeArea: uni.getSystemInfoSync().safeAreaInsets.bottom,
     };
   },
 };
