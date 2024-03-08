@@ -1,6 +1,7 @@
 <script setup>
 import KDatePicker from "../../package/components/k-date-picker/KDatePicker.vue";
 import { ref, reactive } from "vue";
+import KDatePickerAlpha from "../../package/components/k-date-picker/KDatePickerAlpha.vue";
 const prop = reactive({
   start: false,
 });
@@ -20,8 +21,16 @@ function onChangeValue() {
       <button @click="onShow">打开选择器</button>
       <button @click="onChangeValue">更改起始值</button>
     </view>
-    <KDatePicker
+    <KDatePickerAlpha
       v-model="prop.start"
+      type="day"
+      is-range
+      :default-value="defaultValue"
+      limit-start-date="2020"
+      limit-end-date="2028"
+      @change="onChange"
+    ></KDatePickerAlpha>
+    <KDatePicker
       type="date"
       is-range
       :default-value="defaultValue"

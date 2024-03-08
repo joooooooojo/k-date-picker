@@ -456,7 +456,7 @@ export default {
       <view class="inner-body">
         <view class="inner-body__arrow">
           <image
-            v-if="type === 'date' || type === 'daterange'"
+            v-if="type === 'date'"
             class="image-arrow"
             :src="left_double"
             @click="toggle('double', 'left')"
@@ -473,16 +473,13 @@ export default {
             @click="toggle('single', 'right')"
           />
           <image
-            v-if="type === 'date' || type === 'daterange'"
+            v-if="type === 'date'"
             class="image-arrow right-arrow"
             :src="left_double"
             @click="toggle('double', 'right')"
           />
         </view>
-        <view
-          class="inner-body__calendar"
-          v-if="type === 'date' || type === 'daterange'"
-        >
+        <view class="inner-body__calendar" v-if="type === 'date'">
           <view class="inner-body__calendar_week">
             <view
               class="inner-body__calendar_week--item"
@@ -510,10 +507,7 @@ export default {
             </view>
           </view>
         </view>
-        <view
-          class="inner-body__months"
-          v-else-if="type === 'month' || type === 'monthrange'"
-        >
+        <view class="inner-body__months" v-else-if="type === 'month'">
           <view
             class="inner-body__months_item"
             :class="{
@@ -782,6 +776,7 @@ export default {
   color: #94a0b4ff;
   font-size: 30rpx;
   margin-top: 20rpx;
+  width: 600rpx;
 }
 
 .is-month-current {
