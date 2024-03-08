@@ -23,7 +23,7 @@ function onChangeValue() {
 
     <KDatePicker
       v-model="prop.start"
-      type="day"
+      type="year"
       is-range
       limit-start-date="2020"
       limit-end-date="2028"

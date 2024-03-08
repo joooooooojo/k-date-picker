@@ -76,7 +76,7 @@ export default {
         return this.currentDay.format("YYYY年");
       }
       if (this.type === "year") {
-        return `${this.rangeStart.format("YYYY")} - ${this.rangeEnd.add(9, "year").format("YYYY")}`;
+        return `${this.startYear.format("YYYY")} - ${this.startYear.add(9, "year").format("YYYY")}`;
       }
     },
     selectedDate() {
@@ -189,16 +189,15 @@ export default {
       }
       return result;
     },
+    startYear() {
+      return this.currentDay.subtract(this.currentDay.year() % 10, "year");
+    },
     years() {
-      const startYear = this.currentDay.subtract(
-        this.currentDay.year() % 10,
-        "year",
-      );
       // 根据currentDay生成10个年份，如果是当前年则加上is-current
       const result = [];
       // 从startYear开始生成一个10年的数组
       for (let i = 0; i < 10; i++) {
-        const date = startYear.add(i, "year");
+        const date = this.startYear.add(i, "year");
         result.push(date);
       }
       return result;
