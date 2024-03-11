@@ -7,10 +7,10 @@ import {
   left,
   left_double,
 } from "./utils";
-import KToast from "../k-toast/KToast.vue";
 import KButton from "../k-bottom-button/KBottomButton.vue";
+import KTransition from "../k-bottom-popup/KBottomPopup.vue";
 export default {
-  components: { KButton, KToast },
+  components: { KTransition, KButton },
   options: {
     virtualHost: true,
   },
@@ -214,48 +214,37 @@ export default {
       left,
       closable,
       left_double,
+      show: false,
     };
   },
   methods: {
     onClick() {
       if (this.isRange) {
-        if (this.rangeStart && this.rangeEnd) {
-          this.$emit("update:modelValue", false);
-          this.$emit("change", [
-            this.formatter
-              ? this.rangeStart.format(this.formatter)
-              : this.rangeStart.valueOf(),
-            this.formatter
-              ? this.rangeEnd.format(this.formatter)
-              : this.rangeEnd.valueOf(),
-          ]);
-        } else {
-          this.$refs.kToast.show({
-            type: "warning",
-            message: "请选择开始日期和结束日期",
-          });
-        }
+        const _rangeStart = this.rangeStart
+          ? this.formatter
+            ? this.rangeStart.format(this.formatter)
+            : this.rangeStart.valueOf()
+          : null;
+        const _rangeEnd = this.rangeEnd
+          ? this.formatter
+            ? this.rangeEnd.format(this.formatter)
+            : this.rangeEnd.valueOf()
+          : null;
+        this.$emit("update:modelValue", false);
+        this.$emit("change", [_rangeStart, _rangeEnd]);
       } else {
-        if (this.selectedDate) {
-          this.$emit("update:modelValue", false);
-          if (this.multiple) {
-            this.$emit(
-              "change",
-              this.checked.map((item) =>
-                this.formatter ? item.format(this.formatter) : item.valueOf(),
-              ),
-            );
-          } else {
-            this.$emit(
-              "change",
-              this.formatter
+        this.$emit("update:modelValue", false);
+        const _checked =
+          this.selectedDate !== "-"
+            ? this.multiple
+              ? this.checked.map((item) =>
+                  this.formatter ? item.format(this.formatter) : item.valueOf(),
+                )
+              : this.formatter
                 ? this.checked[0].format(this.formatter)
-                : this.checked[0].valueOf(),
-            );
-          }
-        } else {
-          this.$refs.kToast.show({ type: "warning", message: "请选择日期" });
-        }
+                : this.checked[0].valueOf()
+            : null;
+        this.$emit("change", _checked);
       }
     },
     handleClickItem(block) {
@@ -376,7 +365,7 @@ export default {
           !Array.isArray(this.defaultValue) ||
           this.defaultValue.length !== 2
         ) {
-          this.$refs.kToast.show("范围选择器的默认值必须为长度为2的数组");
+          console.error("范围选择器的默认值必须为长度为2的数组");
           return;
         }
         this.currentDay = dayjs(this.defaultValue[0]);
@@ -398,11 +387,12 @@ export default {
   watch: {
     modelValue: {
       handler(value) {
-        if (value) {
-          this.$refs.popup.open();
-        } else {
-          this.$refs.popup.close();
-        }
+        this.show = !!value;
+      },
+    },
+    show: {
+      handler(value) {
+        this.$emit("update:modelValue", value);
       },
     },
     type: {
@@ -421,7 +411,7 @@ export default {
 </script>
 
 <template>
-  <uni-popup type="bottom" ref="popup" :safe-area="false" @maskClick="close">
+  <KTransition v-model="show">
     <view class="k-date-picker">
       <view class="inner-top">
         <view>
@@ -515,11 +505,15 @@ export default {
       :safe-area="safeArea"
       :on-click="onClick"
     ></KButton>
-    <KToast ref="kToast"></KToast>
-  </uni-popup>
+  </KTransition>
 </template>
 
 <style lang="scss">
+.k-date-transition {
+  height: 100%;
+  width: 750rpx;
+}
+
 .k-date-picker {
   /** 控制选中文字的位置 **/
   --bottom-offset: 10%;
