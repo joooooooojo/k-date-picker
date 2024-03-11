@@ -8,9 +8,9 @@ import {
   left_double,
 } from "./utils";
 import KButton from "../k-bottom-button/KBottomButton.vue";
-import KTransition from "../k-bottom-popup/KBottomPopup.vue";
+import KBottomPopup from "../k-bottom-popup/KBottomPopup.vue";
 export default {
-  components: { KTransition, KButton },
+  components: { KBottomPopup, KButton },
   options: {
     virtualHost: true,
   },
@@ -418,7 +418,6 @@ export default {
     // #ifndef VUE3
     value: {
       handler(value) {
-        console.log(value);
         this.show = !!value;
       },
     },
@@ -444,7 +443,7 @@ export default {
 </script>
 
 <template>
-  <KTransition v-model="show">
+  <KBottomPopup v-model="show">
     <view class="k-date-picker">
       <view class="inner-top">
         <view>
@@ -538,20 +537,15 @@ export default {
       :safe-area="safeArea"
       @onClick="onClick"
     ></KButton>
-  </KTransition>
+  </KBottomPopup>
 </template>
 
 <style lang="scss">
-.k-date-transition {
-  height: 100%;
-  width: 750rpx;
-}
-
 .k-date-picker {
   /** 控制提示文字的位置 **/
   --bottom-offset: 10%;
   /** 控制提示文字的大小 **/
-  --bottom-font-size: 22rpx;
+  --bottom-font-size: 18rpx;
   /** 选中时字体的颜色**/
   --seletct--text-color: white;
   /** 选中时背景颜色 **/
