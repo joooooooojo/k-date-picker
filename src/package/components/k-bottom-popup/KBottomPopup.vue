@@ -6,21 +6,38 @@ export default {
   },
   // #ifndef VUE3
   model: {
-    prop: "modelValue",
-    event: "update:modelValue",
+    prop: "value",
+    event: "input",
   },
   // #endif
   props: {
+    // #ifndef VUE3
+    value: {
+      type: Boolean,
+      default: false,
+    },
+    // #endif
+    // #ifdef VUE3
     modelValue: {
       type: Boolean,
       default: false,
     },
+    // #endif
   },
   data() {
     return {
-      show: false,
       stopPropagation: false,
     };
+  },
+  computed: {
+    show() {
+      // #ifdef VUE3
+      return this.modelValue;
+      // #endif
+      // #ifndef VUE3
+      return this.value;
+      // #endif
+    },
   },
   methods: {
     maskClick() {
@@ -28,7 +45,12 @@ export default {
         this.stopPropagation = false;
         return;
       }
+      // #ifndef VUE3
+      this.$emit("input", false);
+      // #endif
+      // #ifdef VUE3
       this.$emit("update:modelValue", false);
+      // #endif
     },
     /** 阻止事件冒泡 */
     onTouchStart(e) {
@@ -41,17 +63,19 @@ export default {
 
 <template>
   <view
-    :style="{
-      opacity: modelValue ? 1 : 0,
-      zIndex: modelValue ? 10086 : -10086,
-    }"
+    :style="[
+      {
+        opacity: show ? 1 : 0,
+        zIndex: show ? 10086 : -10086,
+      },
+    ]"
     class="k-bottom-popup"
     @click="maskClick"
   >
     <view
       :class="{
-        fade: !modelValue,
-        'fade-out': modelValue,
+        fade: !show,
+        'fade-out': show,
       }"
       class="tran-content"
       @touchstart="onTouchStart"

@@ -16,11 +16,17 @@ export default {
   },
   // #ifndef VUE3
   model: {
-    prop: "modelValue",
-    event: "update:modelValue",
+    prop: "value",
+    event: "input",
   },
   // #endif
   props: {
+    // #ifndef VUE3
+    value: {
+      type: Boolean,
+      default: false,
+    },
+    // #endif
     confirmText: {
       type: String,
       default: "确定",
@@ -29,10 +35,12 @@ export default {
       type: String,
       default: "请选择",
     },
+    // #ifdef VUE3
     modelValue: {
       type: Boolean,
       default: false,
     },
+    // #endif
     defaultValue: {
       type: [String, Number, Array],
     },
@@ -230,10 +238,20 @@ export default {
             ? this.rangeEnd.format(this.formatter)
             : this.rangeEnd.valueOf()
           : null;
+        // #ifndef VUE3
+        this.$emit("input", false);
+        // #endif
+        // #ifdef VUE3
         this.$emit("update:modelValue", false);
+        // #endif
         this.$emit("change", [_rangeStart, _rangeEnd]);
       } else {
+        // #ifndef VUE3
+        this.$emit("input", false);
+        // #endif
+        // #ifdef VUE3
         this.$emit("update:modelValue", false);
+        // #endif
         const _checked =
           this.selectedDate !== "-"
             ? this.multiple
@@ -340,7 +358,12 @@ export default {
       }
     },
     close() {
+      // #ifndef VUE3
+      this.$emit("input", false);
+      // #endif
+      // #ifdef VUE3
       this.$emit("update:modelValue", false);
+      // #endif
     },
     init() {
       // 检查类型是否为 day | month | year
@@ -385,11 +408,21 @@ export default {
     this.init();
   },
   watch: {
+    // #ifdef VUE3
     modelValue: {
       handler(value) {
         this.show = !!value;
       },
     },
+    // #endif
+    // #ifndef VUE3
+    value: {
+      handler(value) {
+        console.log(value);
+        this.show = !!value;
+      },
+    },
+    // #endif
     show: {
       handler(value) {
         this.$emit("update:modelValue", value);
@@ -488,7 +521,7 @@ export default {
               :key="index"
               @click="handleClickItem(block)"
             >
-              {{ block.chinese }}
+              {{ block.chinese || "" }}
             </view>
           </view>
         </view>
@@ -503,7 +536,7 @@ export default {
       :label="confirmText"
       :box-shadow="false"
       :safe-area="safeArea"
-      :on-click="onClick"
+      @onClick="onClick"
     ></KButton>
   </KTransition>
 </template>
@@ -515,8 +548,10 @@ export default {
 }
 
 .k-date-picker {
-  /** 控制选中文字的位置 **/
+  /** 控制提示文字的位置 **/
   --bottom-offset: 10%;
+  /** 控制提示文字的大小 **/
+  --bottom-font-size: 22rpx;
   /** 选中时字体的颜色**/
   --seletct--text-color: white;
   /** 选中时背景颜色 **/
@@ -553,7 +588,8 @@ export default {
       left: 50%;
       bottom: var(--bottom-offset);
       transform: translate(-50%);
-      font-size: 22rpx;
+      font-size: var(--bottom-font-size);
+      line-height: var(--bottom-font-size);
       /* #ifdef APP-PLUS */
       font-weight: 500;
       /* #endif */
@@ -563,7 +599,6 @@ export default {
     grid-template-columns: repeat(7, minmax(0, 1fr));
     .is-current:after {
       content: "本日";
-      bottom: 6%;
     }
   }
   .is-month {
@@ -661,7 +696,8 @@ export default {
       left: 50%;
       bottom: var(--bottom-offset);
       transform: translate(-50%);
-      font-size: 18rpx;
+      font-size: var(--bottom-font-size);
+      line-height: var(--bottom-font-size);
       /* #ifdef APP-PLUS */
       font-weight: 500;
       /* #endif */
@@ -679,7 +715,8 @@ export default {
       left: 50%;
       bottom: var(--bottom-offset);
       transform: translate(-50%);
-      font-size: 18rpx;
+      font-size: var(--bottom-font-size);
+      line-height: var(--bottom-font-size);
       /* #ifdef APP-PLUS */
       font-weight: 500;
       /* #endif */
@@ -697,7 +734,8 @@ export default {
       left: 50%;
       bottom: var(--bottom-offset);
       transform: translate(-50%);
-      font-size: 18rpx;
+      font-size: var(--bottom-font-size);
+      line-height: var(--bottom-font-size);
       /* #ifdef APP-PLUS */
       font-weight: 500;
       /* #endif */

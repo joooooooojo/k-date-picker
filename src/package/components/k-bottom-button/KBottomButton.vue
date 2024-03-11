@@ -12,9 +12,9 @@
       :style="{
         color: button.color,
         backgroundColor: button.background,
-        border: '2rpx solid ' + (button.borderColor ?? 'transparent'),
+        border: `2rpx solid ${button.borderColor || 'transparent'}`,
       }"
-      @click="button.onClick"
+      @click="onClick(index)"
       :key="index"
     >
       {{ button.label }}
@@ -43,11 +43,7 @@ export default {
     label: {
       type: String,
       default: "",
-    },
-    onClick: {
-      type: Function,
-      default: () => {},
-    },
+    }
   },
   computed: {
     list() {
@@ -59,7 +55,6 @@ export default {
             label: this.label,
             color: "white",
             background: "#005CEEFF",
-            onClick: this.onClick,
           },
         ];
       }
@@ -69,6 +64,11 @@ export default {
     return {
       bottomSafeArea: uni.getSystemInfoSync().safeAreaInsets.bottom,
     };
+  },
+  methods: {
+    onClick(index) {
+      this.$emit("onClick", index);
+    },
   },
 };
 </script>
