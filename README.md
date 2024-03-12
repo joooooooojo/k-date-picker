@@ -16,19 +16,19 @@
 
 ### 属性
 
-| 属性名       | 类型                   | 默认值   | 可选值                                                       | 说明                     |
-| ------------ | ---------------------- | ------------ | ------------------------------------------------------------ | ------------------------ |
-| modelValue | Boolean                | -      |                                                              | 控制选择器显示           |
-| confirmText  | String                 | 确认   |                                                              | 底部按钮文字             |
-| title        | String                 | 请选择 |                                                              | 选择器标题               |
-| defaultValue | String\|Number\|Arrary | -      | 凡是可被dayjs初始化的值都可传入 | 选择器初始化时默认值（不允许传入Number类型的年份 如：2020 改为 '2020'） |
-| type         | String                 | -      | "day" \| "month" \| "year" | 选择器类型               |
-| isRange | Boolean | false |  | 选择器是否为范围选择器 |
-| safeArea     | Boolean                | true   |                                                              | 选择器下方是否有安全区域 |
-| limitStartDate | Number \| String | - | 凡是可被dayjs初始化的值都可传入 | 限制选择器起始日期（不允许传入Number类型的年份 如：2020 改为 '2020'） |
-| limitEndDate | Number \| String | - | 凡是可被dayjs初始化的值都可传入 | 限制选择器结束日期（不允许传入Number类型的年份 如：2020 改为 '2020'） |
-| multiple | Boolean | false |  | 多选（目前暂不支持多选时间段。） |
-| formatter | String |  |  | 格式化返回的数据例如 'YYYY-MM-DD' |
+| 属性名       | 类型                   | 默认值   | 可选值                       | 说明                                                   |
+| ------------ | ---------------------- |-------|---------------------------|------------------------------------------------------|
+| modelValue | Boolean                | -     |                           | 控制选择器显示                                              |
+| confirmText  | String                 | 确认    |                           | 底部按钮文字                                               |
+| title        | String                 | 请选择   |                           | 选择器标题                                                |
+| defaultValue | String\|Number\|Arrary | -     | 凡是可被dayjs初始化的值都可传入        | 选择器初始化时默认值（不允许传入Number类型的年份 如：2020 改为 '2020'）        |
+| type         | String                 | -     | "day" \| "month" \| "year" | 选择器类型                                                |
+| isRange | Boolean | false |                           | 选择器是否为范围选择器                                          |
+| safeArea     | Boolean                | true  |                           | 选择器下方是否有安全区域                                         |
+| limitStartDate | Number \| String | -     | 凡是可被dayjs初始化的值都可传入        | 限制选择器起始日期（不允许传入Number类型的年份 如：2020 改为 '2020'）         |
+| limitEndDate | Number \| String | -     | 凡是可被dayjs初始化的值都可传入        | 限制选择器结束日期（不允许传入Number类型的年份 如：2020 改为 '2020'）         |
+| multiple | Boolean | false |                           | 多选（目前暂不支持多选时间段。）                                     |
+| formatter | String | -     |                           | change返回的数据默认为时间戳格式，通过此项配置可以格式化返回的数据。例如 'YYYY-MM-DD' |
 
 ### 事件
 
@@ -44,7 +44,7 @@
   /** 控制提示文字的位置 **/
   --bottom-offset: 10%;
   /** 控制提示文字的大小 **/
-  --bottom-font-size: 22rpx;
+  --bottom-font-size: 18rpx;
   /** 选中时字体的颜色**/
   --seletct--text-color: white;
   /** 选中时背景颜色 **/
