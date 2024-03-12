@@ -48,10 +48,6 @@ export default {
       type: String, //"day" | "month" | "year"
       default: "day",
     },
-    safeArea: {
-      type: Boolean,
-      default: true,
-    },
     /** 限制开始时间 **/
     limitStartDate: {
       type: [String, Number],
