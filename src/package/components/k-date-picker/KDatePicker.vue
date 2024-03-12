@@ -375,9 +375,11 @@ export default {
           console.error("区间选择器的默认值必须为长度为2的数组");
           return;
         }
-        this.currentDay = dayjs(this.defaultValue[0]);
-        this.rangeStart = dayjs(this.defaultValue[0]);
-        this.rangeEnd = dayjs(this.defaultValue[1]);
+        this.currentDay = this.defaultValue[0]
+          ? dayjs(this.defaultValue[0])
+          : dayjs();
+        this.defaultValue[0] && (this.rangeStart = dayjs(this.defaultValue[0]));
+        this.defaultValue[1] && (this.rangeEnd = dayjs(this.defaultValue[1]));
       } else {
         if (this.multiple && Array.isArray(this.defaultValue)) {
           this.checked = this.defaultValue.map((item) => dayjs(item));
