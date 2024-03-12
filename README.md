@@ -7,7 +7,24 @@
 ## 使用方法
 
 ```vue
-<KDatePicker v-model="show" type="date" isRange></KDatePicker>
+<template>
+  <view>
+    <button @click="open">打开选择器</button>
+    <KDatePicker v-model="show" type="day" is-range @change="handleChange" formatter="YYYY-MM-DD" />
+  </view>
+</template>
+
+<script setup>
+  import KDatePicker from '../../components/k-date-picker/KDatePicker.vue'
+  const show = ref(false)
+  const date = ref('')
+  const open = () => {
+    show.value = true
+  }
+  const handleChange = (value) => {
+    date.value = value
+  }
+</script>
 ```
 
 ## 注意 ！
