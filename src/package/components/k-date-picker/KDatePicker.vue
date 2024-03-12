@@ -238,20 +238,8 @@ export default {
             ? this.rangeEnd.format(this.formatter)
             : this.rangeEnd.valueOf()
           : null;
-        // #ifndef VUE3
-        this.$emit("input", false);
-        // #endif
-        // #ifdef VUE3
-        this.$emit("update:modelValue", false);
-        // #endif
         this.$emit("change", [_rangeStart, _rangeEnd]);
       } else {
-        // #ifndef VUE3
-        this.$emit("input", false);
-        // #endif
-        // #ifdef VUE3
-        this.$emit("update:modelValue", false);
-        // #endif
         const _checked =
           this.selectedDate !== "-"
             ? this.multiple
@@ -388,7 +376,7 @@ export default {
           !Array.isArray(this.defaultValue) ||
           this.defaultValue.length !== 2
         ) {
-          console.error("范围选择器的默认值必须为长度为2的数组");
+          console.error("区间选择器的默认值必须为长度为2的数组");
           return;
         }
         this.currentDay = dayjs(this.defaultValue[0]);
@@ -424,7 +412,12 @@ export default {
     // #endif
     show: {
       handler(value) {
+        // #ifdef VUE3
         this.$emit("update:modelValue", value);
+        // #endif
+        // #ifndef VUE3
+        this.$emit("input", value);
+        // #endif
       },
     },
     type: {
@@ -524,6 +517,7 @@ export default {
             </view>
           </view>
         </view>
+        <!--        多选由于需要显示的数据可能会较多，这里不再就多选的数据进行展示-->
         <view class="selected-wrap" v-if="!multiple">
           <view class="selected-date">
             {{ selectedDate }}
