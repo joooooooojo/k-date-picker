@@ -524,7 +524,7 @@ export default {
     <KButton
       :label="confirmText"
       :box-shadow="false"
-      :safe-area="safeArea"
+      :safe-area="true"
       @onClick="onClick"
     ></KButton>
   </KBottomPopup>

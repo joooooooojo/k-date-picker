@@ -27,6 +27,7 @@ export default {
   data() {
     return {
       stopPropagation: false,
+      zIndex: -10086,
     };
   },
   computed: {
@@ -57,6 +58,19 @@ export default {
       this.stopPropagation = true;
     },
   },
+  watch: {
+    show: {
+      handler(n) {
+        if (n) {
+          this.zIndex = 10086;
+        } else {
+          setTimeout(() => {
+            this.zIndex = -10086;
+          }, 300);
+        }
+      },
+    },
+  },
   mounted() {},
 };
 </script>
@@ -66,7 +80,7 @@ export default {
     :style="[
       {
         opacity: show ? 1 : 0,
-        zIndex: show ? 10086 : -10086,
+        zIndex: zIndex,
       },
     ]"
     class="k-bottom-popup"
@@ -95,7 +109,6 @@ export default {
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: -10086;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   .fade {
