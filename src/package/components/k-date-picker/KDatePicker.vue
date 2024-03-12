@@ -232,7 +232,7 @@ export default {
         const _rangeEnd = this.rangeEnd
           ? this.formatter
             ? this.rangeEnd.format(this.formatter)
-            : this.rangeEnd.valueOf()
+            : this.rangeEnd.endOf(this.type).valueOf()
           : null;
         this.$emit("change", [_rangeStart, _rangeEnd]);
       } else {
