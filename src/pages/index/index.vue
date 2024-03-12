@@ -26,9 +26,9 @@ const onChange = (e) => {
 
     <KDatePicker
       v-model="prop.start"
-      type="date"
+      type="month"
       @change="onChange"
-      multiple
+      is-range
       limit-start-date="2020"
       limit-end-date="2028"
     ></KDatePicker>

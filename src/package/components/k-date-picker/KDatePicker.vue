@@ -695,7 +695,7 @@ export default {
   }
   .is-start {
     &:after {
-      content: "开始";
+      content: "开始" !important;
       color: var(--seletct--text-color) !important;
       position: absolute;
       left: 50%;
@@ -714,7 +714,7 @@ export default {
   }
   .is-end {
     &:after {
-      content: "结束";
+      content: "结束" !important;
       color: var(--seletct--text-color) !important;
       position: absolute;
       left: 50%;
