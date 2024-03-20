@@ -12,8 +12,21 @@ function onShow() {
 function onChangeValue() {
   defaultValue.value = ["2021", "2022"];
 }
+
+const type = ref("month");
+
 const onChange = (e) => {
   console.log(e);
+};
+
+const switchType = (_type) => {
+  type.value = _type;
+};
+
+const isRange = ref(false);
+
+const switchRange = () => {
+  isRange.value = !isRange.value;
 };
 </script>
 
@@ -22,13 +35,17 @@ const onChange = (e) => {
     <view class="text-area">
       <button @click="onShow">打开选择器</button>
       <button @click="onChangeValue">更改起始值</button>
+      <button @click="switchType('year')">年</button>
+      <button @click="switchType('month')">月</button>
+      <button @click="switchType('day')">日</button>
+      <button @click="switchRange">是否为区间选择器</button>
     </view>
 
     <KDatePicker
       v-model="prop.start"
-      type="month"
+      :type="type"
       @change="onChange"
-      is-range
+      :is-range="isRange"
       limit-start-date="2020"
       limit-end-date="2028"
     ></KDatePicker>
@@ -54,6 +71,7 @@ const onChange = (e) => {
 
 .text-area {
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 

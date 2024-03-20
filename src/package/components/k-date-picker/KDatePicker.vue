@@ -418,6 +418,16 @@ export default {
         // #endif
       },
     },
+    isRange: {
+      handler() {
+        this.init();
+      },
+    },
+    multiple: {
+      handler() {
+        this.init();
+      },
+    },
     type: {
       handler() {
         this.init();
