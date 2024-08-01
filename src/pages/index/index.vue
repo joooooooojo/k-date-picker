@@ -45,7 +45,7 @@ const switchRange = () => {
       v-model="prop.start"
       :type="type"
       @change="onChange"
-      :is-range="isRange"
+      :range="isRange"
       limit-start-date="2020"
       limit-end-date="2028"
     ></KDatePicker>

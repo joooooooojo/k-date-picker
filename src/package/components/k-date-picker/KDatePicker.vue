@@ -61,7 +61,7 @@ export default {
       type: String,
     },
     /** 是否为范围选择器 **/
-    isRange: {
+    range: {
       type: Boolean,
       default: () => false,
     },
@@ -90,7 +90,7 @@ export default {
         year: "YYYY年",
       };
       const format = formatMap[this.type];
-      if (this.isRange) {
+      if (this.range) {
         return `${this.rangeStart ? this.rangeStart.format(format) : "-"} 至 ${this.rangeEnd ? this.rangeEnd.format(format) : "-"}`;
       } else {
         if (this.checked.length > 0) {
@@ -162,7 +162,7 @@ export default {
                 .isBefore(this.rangeEnd.startOf(this.type)),
           };
           // 若果既是范围起点又是范围终点，那么设置为选中
-          if (this.isRange) {
+          if (this.range) {
             obj.isSelect = obj.isStart && obj.isEnd;
           }
           result.push(obj);
@@ -223,7 +223,7 @@ export default {
   },
   methods: {
     onClick() {
-      if (this.isRange) {
+      if (this.range) {
         const _rangeStart = this.rangeStart
           ? this.formatter
             ? this.rangeStart.format(this.formatter)
@@ -257,7 +257,7 @@ export default {
         (this.limitStartDate && block.date.isBefore(dayjs(this.limitStartDate)))
       )
         return;
-      if (this.isRange) {
+      if (this.range) {
         //如果有结束日期和开始日期，并且点击的不是开始日期和结束日期，则将其设置为开始日期并清除结束日期
         if (
           this.rangeStart &&
@@ -356,7 +356,7 @@ export default {
         return;
       }
       // 检查 isRange和 multiple 是否同时为 true
-      if (this.isRange && this.multiple) {
+      if (this.range && this.multiple) {
         console.error("目前暂不支持时间段的多选");
         return;
       }
@@ -367,7 +367,7 @@ export default {
       this.rangeEnd = null;
       // 初始化数据
       if (!this.defaultValue) return;
-      if (this.isRange) {
+      if (this.range) {
         if (
           !Array.isArray(this.defaultValue) ||
           this.defaultValue.length !== 2
@@ -418,7 +418,7 @@ export default {
         // #endif
       },
     },
-    isRange: {
+    range: {
       handler() {
         this.init();
       },
@@ -487,7 +487,7 @@ export default {
         <view class="inner-body__calendar">
           <view
             class="inner-body__calendar_week"
-            :style="{ columnGap: isRange ? '0' : '12rpx' }"
+            :style="{ columnGap: range ? '0' : '12rpx' }"
             v-if="type === 'day'"
           >
             <view
@@ -505,7 +505,7 @@ export default {
               'is-year': type === 'year',
             }"
             :data-text="backText"
-            :style="{ columnGap: isRange ? '0' : '12rpx' }"
+            :style="{ columnGap: range ? '0' : '12rpx' }"
           >
             <view
               class="inner-body__calendar_block--item"
@@ -596,6 +596,12 @@ export default {
     .is-current:after {
       content: "本日";
     }
+    .is-start:after{
+      content: "开始";
+    }
+    .is-end:after{
+      content: "结束";
+    }
   }
   .is-month {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -603,12 +609,24 @@ export default {
     .is-current:after {
       content: "本月";
     }
+    .is-start:after{
+      content: "开始";
+    }
+    .is-end:after{
+      content: "结束";
+    }
   }
   .is-year {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-top: 24rpx;
     .is-current:after {
       content: "本年";
+    }
+    .is-start:after{
+      content: "开始";
+    }
+    .is-end:after{
+      content: "结束";
     }
   }
   .inner-top {
@@ -705,7 +723,7 @@ export default {
   }
   .is-start {
     &:after {
-      content: "开始" !important;
+      content: "开始";
       color: var(--seletct--text-color) !important;
       position: absolute;
       left: 50%;
@@ -724,7 +742,7 @@ export default {
   }
   .is-end {
     &:after {
-      content: "结束" !important;
+      content: "结束";
       color: var(--seletct--text-color) !important;
       position: absolute;
       left: 50%;
